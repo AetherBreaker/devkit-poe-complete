@@ -15,25 +15,25 @@
 /// fix both count, because both mean an installed shim differs from the shipped one. It is
 /// deliberately unrelated to the package version: an ordinary devkit release that leaves
 /// these constants alone changes nothing and triggers no repair.
-pub const SHIM_VERSION: u32 = 2;
+pub const SHIM_VERSION: u32 = 3;
 
-/// `devkit complete script --bash`; written to the bash completion directories by
-/// `devkit complete install --bash`.
-pub const BASH: &str = r##"# Bash completion for poe - devkit thin shim (shim version 2)
+/// `devkit-complete script --bash`; written to the bash completion directories by
+/// `devkit-complete install --bash`.
+pub const BASH: &str = r##"# Bash completion for poe - devkit thin shim (shim version 3)
 #
-# Installed by `devkit complete install --bash`. All completion logic lives in
-# `devkit complete query`; this file only forwards the command line and acts on the
+# Installed by `devkit-complete install --bash`. All completion logic lives in
+# `devkit-complete query`; this file only forwards the command line and acts on the
 # directory/file sentinel. Rewritten automatically when devkit's shim version changes.
 
 _poe_complete() {
     COMPREPLY=()
 
-    # No devkit on PATH - normally an unactivated venv. Offer nothing rather than erroring:
+    # No devkit-complete on PATH - normally an unactivated venv. Offer nothing rather than erroring:
     # a completer that fails prints over the user's prompt.
-    command -v devkit >/dev/null 2>&1 || return 0
+    command -v devkit-complete >/dev/null 2>&1 || return 0
 
     local out
-    out=$(devkit complete query --shell bash --shim-version 2 \
+    out=$(devkit-complete query --shell bash --shim-version 3 \
             --line "$COMP_LINE" --point "$COMP_POINT" 2>/dev/null) || return 0
     [[ -z "$out" ]] && return 0
 
@@ -68,20 +68,20 @@ _poe_complete() {
 complete -F _poe_complete poe
 "##;
 
-/// `devkit complete script --powershell`; written to
+/// `devkit-complete script --powershell`; written to
 /// `~/.local/share/devkit/poe-completion.ps1` and dot-sourced from `$PROFILE`.
-pub const POWERSHELL: &str = r##"# PowerShell completion for poe - devkit thin shim (shim version 2)
+pub const POWERSHELL: &str = r##"# PowerShell completion for poe - devkit thin shim (shim version 3)
 #
-# Installed by `devkit complete install --powershell`. All completion logic lives in
-# `devkit complete query`; this file only forwards the command line and acts on the
+# Installed by `devkit-complete install --powershell`. All completion logic lives in
+# `devkit-complete query`; this file only forwards the command line and acts on the
 # directory/file sentinel. Rewritten automatically when devkit's shim version changes.
 
 Register-ArgumentCompleter -CommandName poe -Native -ScriptBlock {
     param($wordToComplete, $commandAst, $cursorPosition)
 
-    # No devkit on PATH - normally an unactivated venv. Returning nothing is the correct
+    # No devkit-complete on PATH - normally an unactivated venv. Returning nothing is the correct
     # degenerate answer; throwing here would break the prompt.
-    $dk = Get-Command devkit -ErrorAction SilentlyContinue
+    $dk = Get-Command devkit-complete -ErrorAction SilentlyContinue
     if (-not $dk) { return }
 
     $els = @($commandAst.CommandElements)
@@ -104,7 +104,7 @@ Register-ArgumentCompleter -CommandName poe -Native -ScriptBlock {
     # --word-to-complete uses the =value form deliberately: $wordToComplete is empty when a
     # fresh word is starting, and an empty argument passed separately can be dropped
     # entirely, which would make the parser swallow the next token as this flag's value.
-    $out = & $dk.Source complete query --shell powershell --shim-version 2 --cword $cword --word-to-complete=$wordToComplete -- @texts 2>$null
+    $out = & $dk.Source query --shell powershell --shim-version 3 --cword $cword --word-to-complete=$wordToComplete -- @texts 2>$null
     if (-not $out) { return }
 
     $lines = @($out -split "\r?\n" | Where-Object { $_ -ne '' })

@@ -1,9 +1,9 @@
 use std::path::Path;
 
-use aeth_devkit_complete::cache;
-use aeth_devkit_complete::format::{describe_task_args, list_tasks};
-use aeth_devkit_complete::resolve::{Resolved, Task, TaskArg, resolve};
-use aeth_devkit_core::process::{RecordingRunner, SystemRunner};
+use devkit_poe_complete::cache;
+use devkit_poe_complete::format::{describe_task_args, list_tasks};
+use devkit_poe_complete::process::{RecordingRunner, SystemRunner};
+use devkit_poe_complete::resolve::{Resolved, Task, TaskArg, resolve};
 
 fn arg(name: &str, options: &[&str], kind: &str, help: &str, choices: &[&str]) -> TaskArg {
   TaskArg {

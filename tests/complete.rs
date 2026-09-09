@@ -1,7 +1,7 @@
 use std::path::Path;
 
-use aeth_devkit_complete::resolve::{Task, resolve};
-use aeth_devkit_core::process::RecordingRunner;
+use devkit_poe_complete::process::RecordingRunner;
+use devkit_poe_complete::resolve::{Task, resolve};
 
 fn project(pyproject: &str) -> tempfile::TempDir {
   let dir = tempfile::tempdir().unwrap();

@@ -7,7 +7,7 @@
 
 use std::path::PathBuf;
 
-use aeth_devkit_core::process::Runner;
+use crate::process::Runner;
 
 use crate::resolve::TaskArg;
 use crate::{cache, parse};

@@ -14,7 +14,7 @@ use anyhow::{Context as _, Result};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use aeth_devkit_core::process::Runner;
+use crate::process::Runner;
 
 /// One argument of a task, in the shape `poe _describe_task_args` prints.
 #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]

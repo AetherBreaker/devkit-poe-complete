@@ -1,11 +1,11 @@
-use aeth_devkit_complete::{Command, output, scripts};
+use devkit_poe_complete::{Command, output, scripts};
 
 #[test]
 fn scripts_register_for_poe_and_call_devkit_for_data() {
   for (script, shell) in [(scripts::POWERSHELL, "powershell"), (scripts::BASH, "bash")] {
     // The shims ask one question now. `tasks` and `args` remain as subcommands for shims
     // installed by an older devkit, but the shipped shims no longer use them.
-    assert!(script.contains("devkit complete query"), "{shell}");
+    assert!(script.contains("devkit-complete query"), "{shell}");
     assert!(
       !script.contains("poe _list_tasks") && !script.contains("poe _describe_task_args"),
       "{shell}"
@@ -111,17 +111,17 @@ fn tasks_and_args_for_a_real_project_directory() {
 #[test]
 fn an_empty_dir_argument_parses() {
   use clap::Parser as _;
-  let args = aeth_devkit_complete::Args::try_parse_from(["devkit-complete", "tasks", ""]).expect("empty dir must parse");
+  let args = devkit_poe_complete::Args::try_parse_from(["devkit-complete", "tasks", ""]).expect("empty dir must parse");
   assert!(matches!(args.command, Command::Tasks { dir: Some(ref d) } if d.is_empty()));
-  let args = aeth_devkit_complete::Args::try_parse_from(["devkit-complete", "args", "lock", ""]).expect("empty dir must parse");
+  let args = devkit_poe_complete::Args::try_parse_from(["devkit-complete", "args", "lock", ""]).expect("empty dir must parse");
   assert!(matches!(args.command, Command::Args { ref task, dir: Some(ref d) } if task == "lock" && d.is_empty()));
 }
 
 #[test]
 fn install_requires_at_least_one_shell_flag() {
   use clap::Parser as _;
-  assert!(aeth_devkit_complete::Args::try_parse_from(["devkit-complete", "install"]).is_err());
-  let a = aeth_devkit_complete::Args::try_parse_from(["devkit-complete", "install", "--powershell", "--bash", "--dry-run"]).unwrap();
+  assert!(devkit_poe_complete::Args::try_parse_from(["devkit-complete", "install"]).is_err());
+  let a = devkit_poe_complete::Args::try_parse_from(["devkit-complete", "install", "--powershell", "--bash", "--dry-run"]).unwrap();
   assert!(matches!(
     a.command,
     Command::Install {

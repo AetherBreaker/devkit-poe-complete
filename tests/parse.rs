@@ -3,7 +3,7 @@
 //! Every case here was previously implemented twice — once in the bash script and once in
 //! the PowerShell one — which is exactly how the two drifted.
 
-use aeth_devkit_complete::parse::{GLOBAL_OPTIONS, OPTIONS_WITH_VALUES, exclusions, parse};
+use devkit_poe_complete::parse::{GLOBAL_OPTIONS, OPTIONS_WITH_VALUES, exclusions, parse};
 
 /// Build owned words from a display line.
 fn w(line: &str) -> Vec<String> {

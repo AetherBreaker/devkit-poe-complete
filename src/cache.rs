@@ -13,7 +13,7 @@ use std::path::{Path, PathBuf};
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
-use aeth_devkit_core::process::Runner;
+use crate::process::Runner;
 
 use crate::resolve::{Resolved, resolve};
 

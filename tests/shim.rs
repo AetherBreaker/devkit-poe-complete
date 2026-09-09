@@ -5,7 +5,7 @@
 //! speaks, that they never invoke devkit at load time, and that their text cannot change
 //! without the version stamp changing with it.
 
-use aeth_devkit_complete::scripts::{BASH, POWERSHELL, SHIM_VERSION};
+use devkit_poe_complete::scripts::{BASH, POWERSHELL, SHIM_VERSION};
 
 /// FNV-1a, 64-bit. A hand-rolled hash rather than a dependency: this is a change detector,
 /// not a security primitive, and pinning the algorithm here means the expected constants
@@ -35,7 +35,7 @@ fn shim_text_is_pinned_to_its_version() {
   // than letting an installed shim silently differ from the shipped one.
   assert_eq!(
     (fnv1a(BASH), fnv1a(POWERSHELL)),
-    (0xbee4_da6e_4061_9b6a, 0x40ca_fe5e_8fc5_6d3e),
+    (0xfa79_0da2_72da_17f7, 0x4df7_1993_a5a5_0bbf),
     "shim text changed: bump SHIM_VERSION (and the shim's own header comment), then update these hashes"
   );
 }
@@ -52,8 +52,14 @@ fn neither_shim_evaluates_fetched_script_text() {
 #[test]
 fn both_shims_tolerate_devkit_being_absent() {
   // An unactivated venv is a normal state, not an error state.
-  assert!(BASH.contains("command -v devkit"), "bash shim must guard on devkit's presence");
-  assert!(POWERSHELL.contains("Get-Command devkit"), "powershell shim must guard likewise");
+  assert!(
+    BASH.contains("command -v devkit-complete"),
+    "bash shim must guard on devkit-complete's presence"
+  );
+  assert!(
+    POWERSHELL.contains("Get-Command devkit-complete"),
+    "powershell shim must guard likewise"
+  );
 }
 
 #[test]

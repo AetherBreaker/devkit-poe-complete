@@ -3,7 +3,7 @@
 //! bash hands the completer `COMP_LINE` (raw text) and `COMP_POINT` (a byte offset). Every
 //! layer above wants words plus an index, and this is the only place that conversion lives.
 
-use aeth_devkit_complete::words::split_line;
+use devkit_poe_complete::words::split_line;
 
 #[test]
 fn splits_a_plain_line_and_locates_the_cursor_at_the_end() {

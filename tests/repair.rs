@@ -2,10 +2,10 @@
 
 use std::path::Path;
 
-use aeth_devkit_complete::engine::Shell;
-use aeth_devkit_complete::install::{bash_targets, powershell_shim_path};
-use aeth_devkit_complete::repair::repair_if_stale;
-use aeth_devkit_complete::scripts::{BASH, POWERSHELL, SHIM_VERSION};
+use devkit_poe_complete::engine::Shell;
+use devkit_poe_complete::install::{bash_targets, powershell_shim_path};
+use devkit_poe_complete::repair::repair_if_stale;
+use devkit_poe_complete::scripts::{BASH, POWERSHELL, SHIM_VERSION};
 
 /// The version an already-open shell would report after devkit was upgraded under it.
 const OLD: u32 = SHIM_VERSION - 1;

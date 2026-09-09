@@ -4,8 +4,8 @@
 //! so a stray tab or newline in a task's help would silently forge a column or a row. These
 //! tests pin that down.
 
-use aeth_devkit_complete::engine::{Directive, Item, ItemKind};
-use aeth_devkit_complete::wire::render;
+use devkit_poe_complete::engine::{Directive, Item, ItemKind};
+use devkit_poe_complete::wire::render;
 
 fn item(value: &str, display: &str, tooltip: &str, kind: ItemKind) -> Item {
   Item {

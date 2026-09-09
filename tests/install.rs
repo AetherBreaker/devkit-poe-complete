@@ -1,10 +1,10 @@
 use std::path::PathBuf;
 
-use aeth_devkit_complete::install::{
+use devkit_poe_complete::install::{
   FileAction, POWERSHELL_LINE, bash_file_action, install_bash, install_powershell, patch_profile, powershell_profile,
   powershell_shim_path,
 };
-use aeth_devkit_core::process::RecordingRunner;
+use devkit_poe_complete::process::RecordingRunner;
 
 // ---- PowerShell profile text ---------------------------------------------------------------
 
@@ -214,4 +214,14 @@ fn migration_still_removes_the_real_command_with_a_call_operator() {
     log.iter().any(|l| l.contains("removed the previous devkit registration")),
     "{log:?}"
   );
+}
+
+#[test]
+fn the_shipped_shim_of_an_older_version_is_ours_to_overwrite() {
+  let v2 = "# Bash completion for poe - devkit thin shim (shim version 2)
+#
+# Installed by `devkit complete install --bash`.
+_poe_complete() { :; }
+";
+  assert_eq!(bash_file_action(Some(v2), SCRIPT), FileAction::Write);
 }

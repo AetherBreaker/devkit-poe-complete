@@ -1,4 +1,4 @@
-//! `devkit complete` — fast shell completion for poe tasks.
+//! `devkit-complete` — fast shell completion for poe tasks.
 //! See docs/superpowers/specs/2026-09-01-poe-completion-shim-design.md.
 //!
 //! poe's own completion costs ~200 ms per Tab press: it starts Python, imports the
@@ -7,12 +7,12 @@
 //! with the task table resolved natively for TOML and cached for `include_script`.
 //!
 //! The completion *logic* lives in [`engine`], not in shell script. Each shell installs a
-//! ~50-line shim ([`scripts`]) that forwards the command line to `devkit complete query`
+//! ~50-line shim ([`scripts`]) that forwards the command line to `devkit-complete query`
 //! and acts on a directory/file sentinel; everything else — locating the task, global
 //! options, choices, positional indexing — is decided here, once, for both shells.
 //!
-//! That arrangement is why no global devkit install is needed. The shims invoke devkit only
-//! at Tab time, where an activated venv has already put the right one on PATH; the previous
+//! That arrangement is why no global install is needed. The shims invoke `devkit-complete`
+//! only at Tab time, where an activated venv has already put the right one on PATH; the previous
 //! design ran `devkit complete script | Invoke-Expression` from `$PROFILE` at every shell
 //! start, which no per-project binary could ever satisfy.
 
@@ -21,6 +21,7 @@ pub mod engine;
 pub mod format;
 pub mod install;
 pub mod parse;
+pub mod process;
 pub mod repair;
 pub mod resolve;
 pub mod scripts;
@@ -33,7 +34,7 @@ use std::process::ExitCode;
 use anyhow::Result;
 use clap::{Parser, Subcommand};
 
-use aeth_devkit_core::process::SystemRunner;
+use crate::process::SystemRunner;
 
 /// Shell-completion data for poe tasks, served from Rust instead of a Python process.
 #[derive(Parser, Debug, Clone)]

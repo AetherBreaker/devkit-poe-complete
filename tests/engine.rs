@@ -1,12 +1,12 @@
 //! Engine tests: a completion request in, a directive out, with no shell anywhere.
 //!
-//! This is the payoff of keeping [`aeth_devkit_complete::engine::complete`] pure — every
+//! This is the payoff of keeping [`devkit_poe_complete::engine::complete`] pure — every
 //! behaviour the two shell scripts used to own can be asserted as a plain function call.
 
 use std::path::Path;
 
-use aeth_devkit_complete::engine::{Directive, Item, ItemKind, Request, Shell, complete};
-use aeth_devkit_core::process::RecordingRunner;
+use devkit_poe_complete::engine::{Directive, Item, ItemKind, Request, Shell, complete};
+use devkit_poe_complete::process::RecordingRunner;
 
 // ---- fixtures ----------------------------------------------------------------------------
 
