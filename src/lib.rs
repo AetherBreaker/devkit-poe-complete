@@ -1,5 +1,4 @@
 //! `devkit-complete` — fast shell completion for poe tasks.
-//! See docs/superpowers/specs/2026-09-01-poe-completion-shim-design.md.
 //!
 //! poe's own completion costs ~200 ms per Tab press: it starts Python, imports the
 //! poethepoet framework, and — with `include_script` — spawns a second process through

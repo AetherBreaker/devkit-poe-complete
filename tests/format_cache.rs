@@ -190,7 +190,7 @@ fn a_corrupt_cache_file_is_ignored() {
 /// note) when this repo's venv has no `poe`, so it never fails for environmental reasons.
 #[test]
 fn resolved_tasks_match_poe_list_tasks_for_this_repo() {
-  let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("..").join("..");
+  let root = Path::new(env!("CARGO_MANIFEST_DIR"));
   let poe = root.join(".venv").join("Scripts").join("poe.exe");
   let poe = if poe.is_file() {
     poe
