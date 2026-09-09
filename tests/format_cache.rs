@@ -203,7 +203,7 @@ fn resolved_tasks_match_poe_list_tasks_for_this_repo() {
   }
   let out = std::process::Command::new(&poe)
     .arg("_list_tasks")
-    .current_dir(&root)
+    .current_dir(root)
     .output()
     .unwrap();
   let mut expected: Vec<String> = String::from_utf8_lossy(&out.stdout)
@@ -213,7 +213,7 @@ fn resolved_tasks_match_poe_list_tasks_for_this_repo() {
   expected.sort();
   assert!(!expected.is_empty(), "poe listed no tasks");
 
-  let r: Resolved = resolve(&root, &SystemRunner).unwrap();
+  let r: Resolved = resolve(root, &SystemRunner).unwrap();
   let mut actual: Vec<String> = r.tasks.into_iter().map(|t| t.name).collect();
   actual.sort();
   assert_eq!(actual, expected);
