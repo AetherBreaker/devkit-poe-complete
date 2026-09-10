@@ -112,6 +112,7 @@ source = { editable = "." }
 dev = [
     { name = "aeth-devkit" },
     { name = "devkit-claude-hooks" },
+    { name = "devkit-templates" },
     { name = "maturin" },
     { name = "poethepoet" },
     { name = "pyright" },
@@ -128,6 +129,7 @@ dev = [
 dev = [
     { name = "aeth-devkit", specifier = ">=14.0.0", index = "https://pypi.sweetfiretobacco.com/jacob.ogden/internal/+simple" },
     { name = "devkit-claude-hooks", specifier = ">=1.0.0", index = "https://pypi.sweetfiretobacco.com/jacob.ogden/internal/+simple" },
+    { name = "devkit-templates", specifier = ">=1.0.0", index = "https://pypi.sweetfiretobacco.com/jacob.ogden/internal/+simple" },
     { name = "maturin", specifier = ">=1.7,<2" },
     { name = "poethepoet", specifier = ">=0.46.0" },
     { name = "pyright", specifier = ">=1.1.411" },
@@ -136,6 +138,18 @@ dev = [
     { name = "pytest-cov", specifier = ">=5.0" },
     { name = "ruff", specifier = ">=0.15" },
     { name = "tombi", specifier = ">=1.5" },
+]
+
+[[package]]
+name = "devkit-templates"
+version = "1.0.0"
+source = { registry = "https://pypi.sweetfiretobacco.com/jacob.ogden/internal/+simple" }
+dependencies = [
+    { name = "aeth-devkit" },
+]
+sdist = { url = "https://pypi.sweetfiretobacco.com/jacob.ogden/internal/+f/ac4/b0497b04b8999/devkit_templates-1.0.0.tar.gz", hash = "sha256:ac4b0497b04b8999de52a5b01f853ac1166d448a88d647f1d96d16bdb5102fcf" }
+wheels = [
+    { url = "https://pypi.sweetfiretobacco.com/jacob.ogden/internal/+f/c06/87d42b28f6a24/devkit_templates-1.0.0-py3-none-any.whl", hash = "sha256:c0687d42b28f6a24e3868c5083f7725b76e6f83456f862e6f0802d42e14fa9a6" },
 ]
 
 [[package]]
