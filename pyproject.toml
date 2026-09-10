@@ -1,6 +1,6 @@
 [project]
   name            = "devkit-poe-complete"
-  version         = "1.0.0"
+  version         = "1.1.0"
   description     = "poe shell completion for devkit-managed projects: the devkit-complete binary whose shims devkit setup-project installs"
   readme          = "README.md"
   requires-python = ">=3.14"
