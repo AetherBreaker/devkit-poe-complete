@@ -20,11 +20,6 @@ use crate::process::Runner;
 /// and may safely rewrite, unlike the user's profile.
 pub const POWERSHELL_LINE: &str = "$c = \"$HOME/.local/share/devkit/poe-completion.ps1\"; if (Test-Path $c) { . $c }";
 
-/// Fragment identifying the *previous* devkit registration, which this one replaces. That
-/// line ran devkit at every shell start merely to fetch the script text, which is precisely
-/// what made a global install mandatory.
-const OLD_DEVKIT_POWERSHELL_LINE: &str = "devkit complete script --powershell";
-
 /// Fragment identifying poe's own registration line, which devkit's replaces: both register
 /// for the `poe` command and the last one loaded wins, so keeping poe's would only pay its
 /// ~200 ms Python start at every shell launch for nothing.
@@ -57,19 +52,12 @@ pub fn patch_profile(original: Option<&str>) -> (String, Vec<String>) {
   for line in original.lines() {
     let t = line.trim();
     let drop = t.trim_start_matches('&').trim_start().to_ascii_lowercase();
+    // `starts_with` on the normalised form, not `contains` on the raw line: a `contains`
+    // would also match a line that merely mentions the command (a commented-out note in
+    // the user's own profile) and silently delete it. `drop` has stripped a leading `&`
+    // and lowercased, so call-operator and differently-cased spellings still match.
     if drop.starts_with(POE_POWERSHELL_LINE) {
       log.push(format!("removed poe's own registration: {t}"));
-      continue;
-    }
-    // Migration: an earlier devkit put a line here that shelled out at every shell start.
-    //
-    // `starts_with` on the normalised form, not `contains` on the raw line: a `contains`
-    // would also match a line that merely mentions the command -- a commented-out note or
-    // an instruction in the user's own profile -- and silently delete it. `drop` has
-    // already stripped a leading `&` and lowercased, so both call-operator and
-    // differently-cased spellings still match.
-    if drop.starts_with(OLD_DEVKIT_POWERSHELL_LINE) {
-      log.push(format!("removed the previous devkit registration: {t}"));
       continue;
     }
     // Case-insensitive so a hand-typed variant (`out-string | invoke-expression`) counts.

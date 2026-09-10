@@ -22,7 +22,7 @@ Subcommands: `query` (the per-Tab request, called by the shims), `script
   non-zero — a failing completer would break the shell.
 - **Install** - Writes the PowerShell shim to `~/.local/share/devkit/poe-completion.ps1`
   and puts one permanent, content-free line in `$PROFILE` that dot-sources it (also
-  removing poe's own slow registration, and any previous devkit line); writes the bash
+  removing poe's own slow registration); writes the bash
   completion files for Git Bash and Linux; refuses to overwrite files it didn't generate;
   idempotent.
 - **Self-repair** - Each request carries a shim version. A shim older than the binary is
