@@ -6,8 +6,7 @@ the newest release the installed devkit accepts and runs `devkit-complete instal
 shells on `PATH`, so nobody types the command. The shims call the `devkit-complete` an
 activated venv puts on `PATH`; no global install is needed.
 
-Subcommands: `query` (the per-Tab request, called by the shims), `tasks [DIR]` and `args
-<TASK> [DIR]` (retained for shims installed by an older devkit), `script
+Subcommands: `query` (the per-Tab request, called by the shims), `script
 --powershell|--bash`, `install --powershell --bash [--dry-run]`; global `--no-cache`.
 
 - **Thin shims** - Each shell installs a ~50-line shim that forwards the command line to
@@ -19,8 +18,8 @@ Subcommands: `query` (the per-Tab request, called by the shims), `tasks [DIR]` a
   (env-var expansion, cycle guard), hidden `_` tasks skipped, first definition wins;
   `include_script` is executed against the venv python directly, skipping poe's startup.
 - **Caching** - Fingerprint cache at `.cache/devkit-completions.json` (binary version +
-  each source's mtime/size); a corrupt cache is a miss, and the data subcommands never
-  exit non-zero — a failing completer would break the shell.
+  each source's mtime/size); a corrupt cache is a miss, and `query` never exits
+  non-zero — a failing completer would break the shell.
 - **Install** - Writes the PowerShell shim to `~/.local/share/devkit/poe-completion.ps1`
   and puts one permanent, content-free line in `$PROFILE` that dot-sources it (also
   removing poe's own slow registration, and any previous devkit line); writes the bash

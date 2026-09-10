@@ -17,7 +17,6 @@
 
 pub mod cache;
 pub mod engine;
-pub mod format;
 pub mod install;
 pub mod parse;
 pub mod process;
@@ -49,17 +48,6 @@ pub struct Args {
 
 #[derive(Subcommand, Debug, Clone)]
 pub enum Command {
-  /// Print task names on one line (replaces `poe _list_tasks`).
-  Tasks {
-    /// Project directory (defaults to the current directory; an empty string means the same).
-    dir: Option<String>,
-  },
-  /// Print a task's arguments, tab-separated (replaces `poe _describe_task_args`).
-  Args {
-    task: String,
-    /// Project directory (defaults to the current directory; an empty string means the same).
-    dir: Option<String>,
-  },
   /// Print a shell completion script that registers for the `poe` command.
   Script {
     #[arg(long, conflicts_with = "bash")]
@@ -110,24 +98,10 @@ pub enum Command {
   },
 }
 
-/// What to print for the data and script subcommands. Separated from the I/O so it can be
-/// tested without a shell. (`install` has side effects and goes through [`run_install`].)
+/// What to print for `script` and `query`. Separated from the I/O so it can be tested
+/// without a shell. (`install` has side effects and goes through [`run_install`].)
 pub fn output(command: &Command, no_cache: bool) -> String {
   match command {
-    Command::Tasks { dir } => {
-      let root = project_dir(dir.as_deref());
-      cache::resolve_cached(&root, &SystemRunner, no_cache)
-        .map(|r| format::list_tasks(&r.tasks))
-        .unwrap_or_default()
-    }
-    Command::Args { task, dir } => {
-      let root = project_dir(dir.as_deref());
-      cache::resolve_cached(&root, &SystemRunner, no_cache)
-        .ok()
-        .and_then(|r| r.tasks.into_iter().find(|t| &t.name == task))
-        .map(|t| format::describe_task_args(&t))
-        .unwrap_or_default()
-    }
     Command::Script { bash, .. } => if *bash { scripts::BASH } else { scripts::POWERSHELL }.to_string(),
     Command::Query {
       shell,
@@ -142,16 +116,6 @@ pub fn output(command: &Command, no_cache: bool) -> String {
       wire::render(&engine::complete(&req, &SystemRunner, no_cache))
     }
     Command::Install { .. } => String::new(),
-  }
-}
-
-/// The bash completion script always passes `"$target_path"`, which is the empty string when
-/// no `-C` was given; treat that, and a missing argument, as "here". (`dir` is a `String`
-/// rather than a `PathBuf` because clap's `PathBuf` parser rejects an empty value outright.)
-fn project_dir(dir: Option<&str>) -> PathBuf {
-  match dir {
-    Some(d) if !d.is_empty() => PathBuf::from(d),
-    _ => std::env::current_dir().unwrap_or_else(|_| PathBuf::from(".")),
   }
 }
 
@@ -183,7 +147,7 @@ fn build_request(
   };
 
   // `-C ../other` retargets the whole request; without it the process cwd is the project.
-  let cwd = project_dir(None);
+  let cwd = std::env::current_dir().unwrap_or_else(|_| PathBuf::from("."));
   let root = match parse::parse(&words, cword).target_dir.as_deref() {
     // `Path::join` replaces the base outright when the argument is absolute, so this one
     // expression handles both relative and absolute `-C` values.
@@ -242,8 +206,8 @@ pub fn run_install(powershell: bool, bash: bool, dry_run: bool) -> Result<()> {
   Ok(())
 }
 
-/// Production entry. The data/script subcommands never exit non-zero — a completer that
-/// errors breaks the shell — but `install` is an ordinary command and may.
+/// Production entry. `script` and `query` never exit non-zero — a completer that errors
+/// breaks the shell — but `install` is an ordinary command and may.
 pub fn run_real(args: &Args) -> ExitCode {
   match &args.command {
     Command::Install { powershell, bash, dry_run } => match run_install(*powershell, *bash, *dry_run) {
